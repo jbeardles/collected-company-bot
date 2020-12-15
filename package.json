@@ -1,11 +1,12 @@
 {
-  "name": "wow",
+  "name": "collected-company-bot",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "dependencies": {
     "discord.js": "^12.5.1",
-    "dotenv": "^8.2.0"
+    "dotenv": "^8.2.0",
+    "pg": "^8.5.1"
   },
   "devDependencies": {},
   "scripts": {
