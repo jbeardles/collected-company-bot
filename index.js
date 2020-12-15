@@ -18,7 +18,7 @@ client.on('ready', () => {
 
 client.on('message', msg => {
     const { content, channel } = msg;
-    if (content.slice(0, 2) !== '!cc' || channel !== 'bot-text') {
+    if (content.slice(0, 3) !== '!cc' || channel.name !== 'bot-testing') {
         return;
     }
 
