@@ -8,6 +8,7 @@ client.on('ready', () => {
 })
 
 client.on('message', msg => {
+    console.log(`Message received: ${msg}`)
     if (msg.content === "!vizbot" || msg.content === "!kazbot") {
         msg.channel.send("Hellllllll Yeahhhhhh");
     }
