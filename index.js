@@ -1,8 +1,10 @@
 require('dotenv').config();
 
-const discord = require('discord.js');
-const client = new discord.Client();
 const db = require('./src/db');
+const discord = require('./src/discord');
+
+const { addUser, deleteUser } = require('./src/actions/user.actions');
+const { USER_COMMANDS } = require('./src/commands');
 
 db.connect(err => {
     if (err) {
@@ -12,19 +14,30 @@ db.connect(err => {
     }
 });
 
-client.on('ready', () => {
+discord.on('ready', () => {
     console.log('I am ready!');
 })
 
-client.on('message', msg => {
+discord.on('message', async msg => {
     const { content, channel } = msg;
+
     if (content.slice(0, 3) !== '!cc' || channel.name !== 'bot-testing') {
         return;
     }
 
-    if (msg.content === "!cc vizbot" || msg.content === "!cc kazbot") {
-        msg.channel.send("Hellllllll Yeahhhhhh");
+    // Adding a user
+    if (USER_COMMANDS.ADD_USER.test(content)) {
+        await addUser(content, channel);
+        return;
     }
+
+    // Deleting a user
+    if (USER_COMMANDS.DELETE_USER.test(content)) {
+        await deleteUser(content, channel);
+        return;
+    }
+
+    channel.send('Unrecognized command. Type `!cc commands` for a list of commands.');
 })
 
-client.login(process.env.DISCORD_CLIENT_TOKEN);
+discord.login(process.env.DISCORD_CLIENT_TOKEN);
