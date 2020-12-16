@@ -3,8 +3,9 @@ require('dotenv').config();
 const db = require('./src/db');
 const discord = require('./src/discord');
 
-const { addUser, deleteUser } = require('./src/actions/user.actions');
-const { USER_COMMANDS } = require('./src/commands');
+const { addCharacter, deleteCharacter } = require('./src/actions/character.actions');
+const { CHARACTER_COMMANDS, KEYSTONE_COMMANDS } = require('./src/commands');
+const { listKeystones, addKeystone, updateKeystone, deleteKeystone } = require('./src/actions/keystone.actions');
 
 db.connect(err => {
     if (err) {
@@ -25,15 +26,37 @@ discord.on('message', async msg => {
         return;
     }
 
+    /* ==========================
+    ** Characters
+    ** ========================*/
+
     // Adding a user
-    if (USER_COMMANDS.ADD_USER.test(content)) {
-        await addUser(content, channel);
+    if (CHARACTER_COMMANDS.ADD_CHARACTER.test(content)) {
+        await addCharacter(content, channel);
         return;
     }
 
     // Deleting a user
-    if (USER_COMMANDS.DELETE_USER.test(content)) {
-        await deleteUser(content, channel);
+    if (CHARACTER_COMMANDS.DELETE_CHARACTER.test(content)) {
+        await deleteCharacter(content, channel);
+        return;
+    }
+
+    /* ==========================
+    ** Keys
+    ** ========================*/
+    if (KEYSTONE_COMMANDS.LIST.test(content)) {
+        await listKeystones(channel);
+        return;
+    }
+
+    if (KEYSTONE_COMMANDS.ADD_KEYSTONE.test(content)) {
+        await addKeystone(content, channel);
+        return;
+    }
+
+    if (KEYSTONE_COMMANDS.UPDATE_KEYSTONE.test(content)) {
+        await updateKeystone(content, channel);
         return;
     }
 
