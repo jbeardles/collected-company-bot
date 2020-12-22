@@ -151,10 +151,10 @@ const deleteKeystoneQuery = async ({ character }) => {
 
         const keystoneExists = await _checkForExistingKeystone(characterId);
 
-        if (keystoneExists) {
+        if (!keystoneExists) {
             return {
                 success: false,
-                reason: KEYSTONE_QUERY_ERRORS.KEYSTONE_EXISTS,
+                reason: KEYSTONE_QUERY_ERRORS.KEYSTONE_DOES_NOT_EXIST,
             }
         }
 

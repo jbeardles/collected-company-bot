@@ -75,8 +75,28 @@ const updateKeystone = async (content, channel) => {
 }
 
 const deleteKeystone = async (content, channel) => {
-    // !cc keys delete Merseyside
+    // !cc keystone delete Merseyside
+    const splitContent = content.split(' ');
+    const character = splitContent[3];
 
+    try {
+        const { success, reason } = await deleteKeystoneQuery({ character });
+
+        if (!success) {
+            if (reason === CHARACTER_QUERY_ERRORS.CHARACTER_NOT_TRACKED) {
+                channel.send(`Character ${character} is not being tracked. Type \`!cc character add ${character}\` to track a new character.`);
+            } else if (reason === KEYSTONE_QUERY_ERRORS.KEYSTONE_DOES_NOT_EXIST) {
+                channel.send(`No keystone found for ${character}. Please add a key before trying to update.`)
+            } else {
+                channel.send(`There was an error deleting the key for ${character}. Please try again or contact Star for a fix!`);
+            }
+        } else {
+            channel.send(`Deleted key for ${character}.`);
+        }
+    } catch (e) {
+        console.log(e.stack);
+        channel.send(`Internal error deleting key for ${character}. Please try again or contact Star for a fix!`);
+    }
 }
 
 module.exports = {
